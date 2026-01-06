@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Predictor de Salario</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="text-center mb-3">Aplicación Web de Predicción de Salario</h2>
+        <p class="text-center text-muted">
+            Ingresa la información solicitada para estimar el salario anual.
+        </p>
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Edad</label>
+                <input type="number" name="age" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Género</label>
+                <select name="gender" class="form-select" required>
+                    <option value="">Seleccione</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nivel de Educación</label>
+                <select name="education" class="form-select" required>
+                    <option value="">Seleccione</option>
+                    <option>Bachelor</option>
+                    <option>Master</option>
+                    <option>PhD</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Cargo o Puesto de Trabajo</label>
+                <input type="text" name="job" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Años de Experiencia</label>
+                <input type="number" step="0.1" name="experience" class="form-control" required>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                    Predecir Salario
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
