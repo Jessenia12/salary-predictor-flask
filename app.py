@@ -1,74 +1,48 @@
 from flask import Flask, render_template, request
-import matplotlib.pyplot as plt
-import numpy as np
+import joblib
+import pandas as pd
 import os
 
 app = Flask(__name__)
 
+# ======================
+# CARGAR MODELO ENTRENADO
+# ======================
+model = joblib.load("model/salary_model.pkl")
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
+
         # ======================
         # 1. RECIBIR DATOS
         # ======================
-        age = int(request.form["age"])
-        gender = request.form["gender"]
-        education = request.form["education"]
-        job = request.form["job"]
-        experience = float(request.form["experience"])
-
-        # ======================
-        # 2. CÁLCULO DEL SALARIO (EJEMPLO)
-        # ======================
-        salary = int(experience * 500 + 300)
-
-        # ======================
-        # 3. DATOS PARA REGRESIÓN
-        # ======================
-        X = np.array([1, 2, 3, 4, 5, 6])
-        y = np.array([800, 1300, 1800, 2300, 2800, 3300])
-
-        m, b = np.polyfit(X, y, 1)
-        y_pred = m * X + b
-
-        # ======================
-        # 4. CREAR GRÁFICO
-        # ======================
-        plt.figure(figsize=(6, 4))
-        plt.scatter(X, y)
-        plt.plot(X, y_pred)
-        plt.scatter(experience, salary)
-        plt.xlabel("Experiencia")
-        plt.ylabel("Salario")
-        plt.title("Regresión Lineal")
-
-        os.makedirs("static", exist_ok=True)
-        plt.savefig("static/regresion.png")
-        plt.close()
-
-        # ======================
-        # 5. ENVIAR TODOS LOS DATOS
-        # ======================
         data = {
-            "Edad": age,
-            "Género": gender,
-            "Nivel educativo": education,
-            "Cargo": job,
-            "Años de experiencia": experience
+            "Age": int(request.form["age"]),
+            "Gender": request.form["gender"],
+            "Education Level": request.form["education"],
+            "Job Title": request.form["job"],
+            "Years of Experience": float(request.form["experience"])
         }
+
+        # ======================
+        # 2. CONVERTIR A DATAFRAME
+        # ======================
+        input_df = pd.DataFrame([data])
+
+        # ======================
+        # 3. PREDICCIÓN REAL
+        # ======================
+        salary_pred = model.predict(input_df)[0]
 
         return render_template(
             "result.html",
-            salary=salary,
-            data=data,
-            graph="regresion.png"
+            salary=int(salary_pred),
+            data=data
         )
 
     return render_template("index.html")
 
 
-# ======================
-# EJECUCIÓN DE FLASK
-# ======================
 if __name__ == "__main__":
     app.run(debug=True)
